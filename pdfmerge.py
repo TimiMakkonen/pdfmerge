@@ -33,6 +33,9 @@ DEFAULT_MERGE_OUTPUT_FILE_NAME = "merged.pdf"
 
 
 class TooManyRenameAttemptsError(Exception):
+    """
+    Error that occurs if trying to rename a file too many times.
+    """
 
     def __init__(self, num_of_rename_attempts, file_name) -> None:
         super().__init__(
@@ -68,8 +71,9 @@ def rename_file_if_necessary(file):
 
     :param file: File name to modify if the name already exists
     :return: Renamed file
-    :raises:
+    :raises: TooManyRenameAttemptsError
     """
+
     renamed_file = file
     if os.path.exists(renamed_file):
         file_path_part, file_name_part = os.path.split(renamed_file)
