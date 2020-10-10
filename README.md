@@ -3,7 +3,7 @@
 [![GitHub License](https://img.shields.io/github/license/TimiMakkonen/pdfmerge)](/LICENSE)
 ![GitHub Latest Release Tag](https://img.shields.io/github/v/tag/TimiMakkonen/pdfmerge)
 
-Python script for merging PDFs on the command line
+Python script for merging PDFs on the command line.
 
 ## Table of contents
 
