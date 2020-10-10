@@ -1,0 +1,2 @@
+pathvalidate>=2.3.0
+PyMuPDF>=1.18.0
