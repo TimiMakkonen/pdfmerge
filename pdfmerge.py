@@ -59,8 +59,11 @@ def merge_pdfs(outfile, pdf_files):
         with fitz.Document(pdf_file) as pdf_doc:
             result_pdf.insertPDF(pdf_doc)
 
-    # creates directories needed to write the outfile
-    os.makedirs(os.path.dirname(outfile), exist_ok=True)
+    # creates directories needed to write the outfile (if needed)
+    # os.path.normpath() used to turn "" (empty string) directory path to "."
+    # manually checking for "" and turning into "." would also work
+    # https://bugs.python.org/issue33968
+    os.makedirs(os.path.normpath(os.path.dirname(outfile)), exist_ok=True)
 
     result_pdf.save(outfile)
 

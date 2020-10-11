@@ -27,6 +27,11 @@ optional arguments:
 
 ## Version history
 
+### Version DEVELOP
+
+* Fixed substantial bug which caused an error when trying to save merged
+  pdf in the current directory.
+
 ### Version 0.1.0
 
 * Script should work as expected.
