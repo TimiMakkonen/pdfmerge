@@ -32,6 +32,9 @@ optional arguments:
 * Fixed substantial bug which caused an error when trying to save merged
   pdf in the current directory.
 * Added default value information of 'OUTFILE' to help message.
+* Modified docstrings.
+* Added shebang.
+* Linted using default pylint.
 
 ### Version 0.1.0
 
