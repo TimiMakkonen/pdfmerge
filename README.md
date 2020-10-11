@@ -22,7 +22,7 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -o OUTFILE, --outfile OUTFILE
-                        output file of PDF merge
+                        output file of PDF merge, default='merged.pdf'
 ```
 
 ## Version history
@@ -31,6 +31,7 @@ optional arguments:
 
 * Fixed substantial bug which caused an error when trying to save merged
   pdf in the current directory.
+* Added default value information of 'OUTFILE' to help message.
 
 ### Version 0.1.0
 

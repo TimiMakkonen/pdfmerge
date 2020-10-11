@@ -105,7 +105,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("inputfiles", nargs='+', type=validate_filepath_arg, help="input PDF files to merge")
-    parser.add_argument("-o", "--outfile", type=validate_filepath_arg, help="output file of PDF merge",
+    parser.add_argument("-o", "--outfile", type=validate_filepath_arg,
+                        help=f"output file of PDF merge, default='{DEFAULT_MERGE_OUTPUT_FILE_NAME}'",
                         default=DEFAULT_MERGE_OUTPUT_FILE_NAME)
 
     return parser.parse_args()
