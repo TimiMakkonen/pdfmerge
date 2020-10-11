@@ -22,7 +22,11 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -o OUTFILE, --outfile OUTFILE
-                        output file of PDF merge, default='merged.pdf'
+                        output file of PDF merge (default: merged.pdf)
+                        When directory (with ending slash, eg. 'my_dir/')
+                        is given as an argument, default named output is
+                        created in the given directory
+                        (eg. 'my_dir/default_file_name').
 ```
 
 ## Version history
@@ -31,10 +35,11 @@ optional arguments:
 
 * Fixed substantial bug which caused an error when trying to save merged
   pdf in the current directory.
-* Added default value information of 'OUTFILE' to help message.
-* Modified docstrings.
+* Now when directory (with ending slash, eg. 'my_dir/') is given as an
+  argument to '--outfile', default named output is created in the given
+  directory (eg. 'my_dir/default_file_name').
+* Modified docstrings and command line help message.
 * Added shebang.
-* Linted using default pylint.
 
 ### Version 0.1.0
 

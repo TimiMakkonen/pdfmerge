@@ -73,28 +73,52 @@ def merge_pdfs(outfile, pdf_files):
     result_pdf.save(outfile)
 
 
-def rename_file_if_necessary(file):
+def rename_file_if_necessary(file, default_file_name, max_num_of_rename_attempts):
+    """Tries to rename a file if necessary.
+
+    If given a directory file, appends 'default_file_name' to it.
+    If given a file name that already exists, tries concatenate a number to it,
+    up to 'max_num_of_rename_attempts' times.
+
+    :param file: File path/name to modify
+    :param default_file_name: Default file name to append to path if 'file' argument is a directory
+    :param max_num_of_rename_attempts: Maximum number of rename attempts before raising an error
+    :return: Renamed file
+    :raises: TooManyRenameAttemptsError: If trying to rename file too many times
+    """
+
+    # if file is a directory, append default_file_name to path
+    if os.path.basename(file) == '':
+        file += default_file_name
+
+    file = concat_num_to_file_name_if_necessary(file, max_num_of_rename_attempts)
+
+    return file
+
+
+def concat_num_to_file_name_if_necessary(file, max_num_of_rename_attempts):
     """Concatenates file name with a number if a file with same name already exists.
 
-    :param file: File name to modify if the name already exists
-    :return: Renamed file
-    :raises: TooManyRenameAttemptsError
+    :param file: File path/name to modify if the path/name already exists
+    :param max_num_of_rename_attempts: Maximum number of rename attempts before raising an error
+    :return: Renamed file path/name
+    :raises: TooManyRenameAttemptsError: If trying to rename file too many times
     """
 
     renamed_file = file
     if os.path.exists(renamed_file):
-        file_path_part, file_name_part = os.path.split(renamed_file)
-        file_name_first_part, *file_name_rest_parts = file_name_part.split('.')
+        file_dirname, file_basename = os.path.split(renamed_file)
+        file_basename_first_part, *file_basename_rest_parts = file_basename.split('.')
         num_of_rename_attempts = 0
         while os.path.exists(renamed_file):
             num_of_rename_attempts += 1
 
-            if num_of_rename_attempts > MAX_NUM_OF_RENAME_ATTEMPTS:
-                raise TooManyRenameAttemptsError(MAX_NUM_OF_RENAME_ATTEMPTS, file)
+            if num_of_rename_attempts > max_num_of_rename_attempts:
+                raise TooManyRenameAttemptsError(max_num_of_rename_attempts, file)
 
-            renamed_file = os.path.join(file_path_part,
-                                        '.'.join([file_name_first_part + str(
-                                            num_of_rename_attempts)] + file_name_rest_parts))
+            renamed_file = os.path.join(file_dirname,
+                                        '.'.join([file_basename_first_part + str(
+                                            num_of_rename_attempts)] + file_basename_rest_parts))
 
     return renamed_file
 
@@ -105,13 +129,16 @@ def parse_arguments():
     :return: Parsed arguments
     """
 
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
 
     parser.add_argument("inputfiles", nargs='+', type=validate_filepath_arg,
                         help="input PDF files to merge")
     parser.add_argument("-o", "--outfile", type=validate_filepath_arg,
-                        help=f"output file of PDF merge, default='"
-                             f"{DEFAULT_MERGE_OUTPUT_FILE_NAME}'",
+                        help="output file of PDF merge (default: %(default)s)\n"
+                             "When directory (with ending slash, eg. 'my_dir/')\n"
+                             "is given as an argument, default named output is\n"
+                             "created in the given directory\n"
+                             "(eg. 'my_dir/default_file_name').",
                         default=DEFAULT_MERGE_OUTPUT_FILE_NAME)
 
     return parser.parse_args()
@@ -135,7 +162,8 @@ if __name__ == '__main__':
     print_argument_details(args)
 
     try:
-        renamed_outfile = rename_file_if_necessary(args.outfile)
+        renamed_outfile = rename_file_if_necessary(args.outfile, DEFAULT_MERGE_OUTPUT_FILE_NAME,
+                                                   MAX_NUM_OF_RENAME_ATTEMPTS)
 
         merge_pdfs(outfile=renamed_outfile, pdf_files=args.inputfiles)
     except TooManyRenameAttemptsError as error:
