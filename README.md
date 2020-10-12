@@ -31,7 +31,7 @@ optional arguments:
 
 ## Version history
 
-### Version DEVELOP
+### Version 0.2.0
 
 * Fixed substantial bug which caused an error when trying to save merged
   pdf in the current directory.
