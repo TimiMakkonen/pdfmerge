@@ -59,16 +59,23 @@ def merge_pdfs(outfile, pdf_files):
 
     result_pdf = fitz.Document()
 
+    print("reading input pdf files...", flush=True)
+
     # reads pdf files
     for pdf_file in pdf_files:
         with fitz.Document(pdf_file) as pdf_doc:
             result_pdf.insertPDF(pdf_doc)
+
+    print("pdf files have been read")
 
     # creates directories needed to write the outfile (if needed)
     # os.path.normpath() used to turn "" (empty string) directory path to "."
     # manually checking for "" and turning into "." would also work
     # https://bugs.python.org/issue33968
     os.makedirs(os.path.normpath(os.path.dirname(outfile)), exist_ok=True)
+
+    print(f"saving the merged pdf document into: {outfile}")
+    print(f"  ({os.path.abspath(outfile)})")
 
     result_pdf.save(outfile)
 
@@ -149,12 +156,12 @@ def print_argument_details(argparse_args):
 
     :param argparse_args: Parsed arguments
     """
-
-    print("inputfiles:")
+    print("given arguments:")
+    print("  inputfiles:")
     for arg in argparse_args.inputfiles:
         print(f"\t{arg}")
 
-    print(f"outfile: {argparse_args.outfile}")
+    print(f"  outfile: {argparse_args.outfile}\n")
 
 
 if __name__ == '__main__':
@@ -164,6 +171,8 @@ if __name__ == '__main__':
     try:
         renamed_outfile = rename_file_if_necessary(args.outfile, DEFAULT_MERGE_OUTPUT_FILE_NAME,
                                                    MAX_NUM_OF_RENAME_ATTEMPTS)
+        if renamed_outfile != args.outfile:
+            print(f"given outfile argument has been changed to: {renamed_outfile}\n")
 
         merge_pdfs(outfile=renamed_outfile, pdf_files=args.inputfiles)
     except TooManyRenameAttemptsError as error:

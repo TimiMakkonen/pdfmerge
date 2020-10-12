@@ -38,6 +38,7 @@ optional arguments:
 * Now when directory (with ending slash, eg. 'my_dir/') is given as an
   argument to '--outfile', default named output is created in the given
   directory (eg. 'my_dir/default_file_name').
+* Added some helpful console output messages.
 * Modified docstrings and command line help message.
 * Added shebang.
 
